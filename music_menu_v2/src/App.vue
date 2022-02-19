@@ -6,8 +6,8 @@
       </el-header>
       <el-container>
         <el-main>
-          <Search>
-          </Search>
+          <Search></Search>
+          <MusicList></MusicList>
         </el-main>
         <el-aside width="20%">Aside</el-aside>
       </el-container>
@@ -18,11 +18,13 @@
 <script>
 import Header from './components/Header.vue'
 import Search from './components/Search.vue'
+import MusicList from './components/MusicList.vue'
 export default {
   name: 'App',
   components: {
     Header,
-    Search
+    Search,
+    MusicList
   },
 }
 </script>
