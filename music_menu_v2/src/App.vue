@@ -9,7 +9,9 @@
           <Search></Search>
           <MusicList></MusicList>
         </el-main>
-        <el-aside width="20%">Aside</el-aside>
+        <el-aside width="20%">
+          <RandomList></RandomList>
+        </el-aside>
       </el-container>
     </el-container>
   </div>
@@ -19,12 +21,14 @@
 import Header from './components/Header.vue'
 import Search from './components/Search.vue'
 import MusicList from './components/MusicList.vue'
+import RandomList from './components/RandomList.vue'
 export default {
   name: 'App',
   components: {
     Header,
     Search,
-    MusicList
+    MusicList,
+    RandomList
   },
 }
 </script>
