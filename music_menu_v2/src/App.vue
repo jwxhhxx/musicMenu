@@ -5,9 +5,11 @@
         <Header></Header>
       </el-header>
       <el-container>
-        <el-main>Main</el-main>
+        <el-main>
+          <Search>
+          </Search>
+        </el-main>
         <el-aside width="20%">Aside</el-aside>
-
       </el-container>
     </el-container>
   </div>
@@ -15,10 +17,12 @@
 
 <script>
 import Header from './components/Header.vue'
+import Search from './components/Search.vue'
 export default {
   name: 'App',
   components: {
-    Header
+    Header,
+    Search
   },
 }
 </script>
