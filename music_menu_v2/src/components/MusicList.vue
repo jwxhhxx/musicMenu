@@ -1,7 +1,6 @@
 <template>
   <div class="musicList">
-    <el-table :data="tableData"
-              border
+    <el-table border
               style="margin-top:50px"
               :header-cell-style="{background:'#f5f7fa',color:'#606266'}">
       <el-table-column v-for="item  in tableTitle"

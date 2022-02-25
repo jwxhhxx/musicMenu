@@ -8,7 +8,18 @@
       </el-col>
       <el-col :span="12">
         <div class="right_part">
-          <el-button size="small">登录</el-button>
+          <el-button size="small"
+                     @click='toLogin'
+                     v-if="!logged">登录</el-button>
+          <div v-else>
+
+            <label for="">{{userInfo.nickname}}</label>
+            <el-avatar :src="userInfo.avatar"
+                       size="medium"></el-avatar>
+            <el-button size="small"
+                       @click='outLogin'>登出</el-button>
+          </div>
+
         </div>
       </el-col>
     </el-row>
@@ -17,8 +28,32 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
-  name: 'Header'
+  name: 'Header',
+  computed: {
+    ...mapState({ userInfo: (state) => state.userinfo, logged: (state) => state.logged })
+  },
+  methods: {
+    toLogin () {
+      if (this.$route.path == "/home") {
+        this.$router.push("/login");
+      }
+    },
+    async outLogin () {
+      try {
+        await this.$store.dispatch('getOutLogin')
+        alert('退出登录')
+        this.$router.push('/home')
+      } catch (error) {
+
+      }
+    }
+
+  },
+  beforeMount () {
+    this.$store.dispatch('getNowUser')
+  },
 }
 </script>
 
