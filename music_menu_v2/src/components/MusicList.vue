@@ -1,6 +1,7 @@
 <template>
   <div class="musicList">
-    <el-table border
+    <el-table :data="tableData"
+              border
               style="margin-top:50px"
               :header-cell-style="{background:'#f5f7fa',color:'#606266'}">
       <el-table-column v-for="item  in tableTitle"
@@ -10,13 +11,13 @@
                        :prop="item.value"
                        fixed
                        highlight-current-row>
-        <!-- <template slot-scope="scope">
-          <label v-show="!scope.row.isEdit">{{(scope.row)[item.value]}}</label>
-          <el-input type="text"
+        <template slot-scope="scope">
+          <label>{{(scope.row)[item.value]}}</label>
+          <!-- <el-input type="text"
                     v-show="scope.row.isEdit"
                     class="cell-input"
-                    v-model="(scope.row)[item.value]"></el-input>
-        </template> -->
+                    v-model="(scope.row)[item.value]"></el-input> -->
+        </template>
       </el-table-column>
       <!-- <el-table-column v-if="$store.state.ifLogin"
                        fixed="right"
@@ -34,14 +35,17 @@
       </el-table-column> -->
 
     </el-table>
-    <el-pagination :page-sizes="[2]"
-                   :page-size="2"
+    <el-pagination @current-change="handleCurrentChange"
+                   :page-size="pagesize"
+                   :current-page="currentPage"
+                   :total='total'
                    layout="prev, pager, next, jumper">
     </el-pagination>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data () {
     return {
@@ -63,8 +67,31 @@ export default {
           label: '语言',
           // width: 180
         }
-      ]
+      ],
+      pagesize: 5,
+      currentPage: 1
     }
+  },
+  methods: {
+    handleCurrentChange (currentPage) {
+      this.currentPage = currentPage
+      const params = {
+        "pageSize": this.pagesize,
+        "pageNo": this.currentPage
+      }
+      this.$store.dispatch('getMusicList', params)
+
+    }
+  },
+  computed: {
+    ...mapState({ tableData: (state) => state.tableData, total: (state) => state.total })
+  },
+  created () {
+    const params = {
+      "pageSize": this.pagesize,
+      "pageNo": this.currentPage
+    }
+    this.$store.dispatch('getMusicList', params)
   },
 }
 </script>
