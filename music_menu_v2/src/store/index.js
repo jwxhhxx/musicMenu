@@ -2,7 +2,7 @@ import Vuex from "vuex"
 import Vue from "vue"
 Vue.use(Vuex)
 
-import { reqLogin, reqNowUser, reqOutLogin, reqGetMenu, reqRandomList } from '@/api'
+import { reqLogin, reqNowUser, reqOutLogin, reqGetMenu, reqRandomList, reqUpdateList, reqDeleteList, reqAddItem, reqAddList } from '@/api'
 const state = {
   userinfo: {},
   logged: false,
@@ -81,6 +81,44 @@ const actions = {
       return 'ok'
     } else {
       return Promise.reject(new Error("faile"))
+    }
+  },
+  //修改列表信息
+  async UpdateList ({ commit }, params) {
+    let result = await reqUpdateList(params)
+    console.log('修改结果', result)
+    if (result.errorCode == 0) {
+      return 'ok'
+    } else {
+      return Promise.reject(new Error("faile"))
+    }
+  },
+  //删除一项信息
+  async deleteList ({ commit }, params) {
+    let result = await reqDeleteList(params)
+    console.log('删除', result)
+    if (result.errorCode == 0) {
+      return 'ok'
+    } else {
+      return Promise.reject(new Error("faile"))
+    }
+  },
+  async addAData ({ commit }, params) {
+    let result = await reqAddItem(params)
+    console.log("增加一条数据", result)
+    if (result.errorCode == 0) {
+      return 'ok'
+    } else {
+      return Promise.reject(new Error('faile'))
+    }
+  },
+  async addSomeData ({ commit }, params) {
+    let result = await reqAddList(params)
+    console.log("批量增加", result)
+    if (result.errorCode == 0) {
+      return 'ok'
+    } else {
+      return Promise.reject(new Error('faile'))
     }
   }
 }

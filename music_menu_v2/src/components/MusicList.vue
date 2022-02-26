@@ -12,14 +12,14 @@
                        fixed
                        highlight-current-row>
         <template slot-scope="scope">
-          <label>{{(scope.row)[item.value]}}</label>
-          <!-- <el-input type="text"
+          <label v-show="!scope.row.isEdit">{{(scope.row)[item.value]}}</label>
+          <el-input type="text"
                     v-show="scope.row.isEdit"
                     class="cell-input"
-                    v-model="(scope.row)[item.value]"></el-input> -->
+                    v-model="(scope.row)[item.value]"></el-input>
         </template>
       </el-table-column>
-      <!-- <el-table-column v-if="$store.state.ifLogin"
+      <el-table-column v-if="logged"
                        fixed="right"
                        label="操作">
         <template slot-scope="scope">
@@ -32,7 +32,7 @@
                      circle
                      @click="deleteItem(scope.row.id)"></el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
 
     </el-table>
     <el-pagination @current-change="handleCurrentChange"
@@ -47,6 +47,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
+  inject: ["reload"],
   data () {
     return {
       tableTitle: [
@@ -72,26 +73,56 @@ export default {
       currentPage: 1
     }
   },
+
   methods: {
     handleCurrentChange (currentPage) {
       this.currentPage = currentPage
+      this.renovate()
+    },
+    editItem (item) {
+      if (item.isEdit == true) {
+        if (confirm('确定修改吗')) {
+          item.isEdit = false
+          // delete item.isEdit
+          this.$store.dispatch('UpdateList', item)
+
+        }
+
+      } else {
+        if (Object.prototype.hasOwnProperty.call(item, 'isEidt')) {
+          item.isEdit = true
+          console.log(item.isEdit)
+        } else {
+          this.$set(item, 'isEdit', true)
+        }
+      }
+      console.log(item.isEdit)
+    },
+    deleteItem (id) {
+      console.log(id)
+      const params = {
+        "id": id
+      }
+      if (confirm('确定删除吗')) {
+        this.$store.dispatch('deleteList', params)
+        this.reload();
+      }
+    },
+    //刷新
+    renovate () {
       const params = {
         "pageSize": this.pagesize,
         "pageNo": this.currentPage
       }
       this.$store.dispatch('getMusicList', params)
-
     }
-  },
+  }
+  ,
   computed: {
-    ...mapState({ tableData: (state) => state.tableData, total: (state) => state.total })
+    ...mapState({ tableData: (state) => state.tableData, total: (state) => state.total, logged: (state) => state.logged })
   },
   created () {
-    const params = {
-      "pageSize": this.pagesize,
-      "pageNo": this.currentPage
-    }
-    this.$store.dispatch('getMusicList', params)
+    this.renovate()
   },
 }
 </script>

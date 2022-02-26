@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <router-view v-if="isRouterShow"></router-view>
   </div>
 </template>
 
@@ -8,6 +8,23 @@
 
 export default {
   name: 'App',
+  data () {
+    return {
+      isRouterShow: true
+    };
+  },
+  provide () {
+    return {
+      reload: this.reload,
+    };
+  },
+  methods: {
+    async reload () {
+      this.isRouterShow = false;
+      await this.$nextTick();
+      this.isRouterShow = true;
+    },
+  },
 }
 </script>
 
